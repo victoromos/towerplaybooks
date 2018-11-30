@@ -1,0 +1,24 @@
+---
+- name: switch check
+  hosts: sabi
+  become: true
+  gather_facts: no
+
+  tasks:
+    - name: customer switch initiation commands
+      telnet:
+        username: arqiva
+        password: sc00terP3
+        login_prompt: "Username: "
+        prompts:
+        - "[>|#]"
+        command:
+        - show version
+
+    - name: configure top level configuration
+      ios_config:
+        lines: hostname TESTLAB-SWITCH
+
+    - name: save running to startup when modified
+      ios_config:
+        save_when: modified
